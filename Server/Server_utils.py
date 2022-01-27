@@ -1,13 +1,26 @@
-class Lobby():
-    def __init__(self, size: int(), host_ip_addr: str(), name: str()):
-        self.name = name
-        self.host = host_ip_addr
-        self.size = size
-        self.players = dict()
+class Game:
+    def __init__(self):
+        self.players = list()
+
+    def connection(self, pl):
+        if len(self.players) < 8:
+            self.players.append(pl)
+            return 'Вы подключились'
+        else: return 'Игра переполненна ожидайте'
 
 
-    def connect(self, name: str(), ip: str()):
-        self.players[name] = ip
+class Player:
+    def __init__(self, name: str()):
+        self.player_name = name
+        self.money = 0
+        self.workshop = 0
+        self.material = 0
+        self.planes = 0
+        self.ready_to_play = False
 
-    def get_players_names(self):
-        return 1
+    
+    def default_setter(self):
+        self.money = 10000
+        self.planes = 2
+        self.workshop = 2
+        self.material = 4
