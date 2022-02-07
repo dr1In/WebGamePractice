@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 
-from Server_utils import Game, Player, Lobby
+from Server_utils import Game, Lobby
 
 
 app = Flask(__name__)
