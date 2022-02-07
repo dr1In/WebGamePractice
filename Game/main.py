@@ -1,7 +1,7 @@
 from os import system
 import items_for_client
 
-SERVER_IP = '192.168.0.18'
+SERVER_IP = '127.0.0.1'
 SERVER_URL = f'http://{SERVER_IP}:5000/'
 
 
