@@ -8,7 +8,8 @@ def Lobby_creation(username):
     while True:
         resp  = requests.post(f'{SERVER_URL}create_lobby', json = {
             'name': input('Название лобби: '),
-            'max': input('Кол-во игроков: '),
+            'max': input('Кол-во игроков (мин - 2): '),
+            'month': input('Кол-во месяцев или 0 (пока все не банкроты)'),
             'user': username
         })
         if resp.json()['status'] == 'ok':
@@ -21,7 +22,7 @@ def Lobby_creation(username):
 def Lobby_connection(username):
     resp = requests.get(f'{SERVER_URL}lobbies')
     for lobby in resp.json()['lobbies']:
-        print(lobby['lobby_name'] + ':', lobby['max'])
+        print(lobby['lobby_name'] + ':', lobby['max'], lobby['type'])
     while True:
         cur_lobby = input('Для подключения введите название лобби: ')
         to_connect = requests.post(f'{SERVER_URL}lobby_connect', json={

@@ -1,9 +1,11 @@
 class Lobby():
-    def __init__(self, lobby_name: str(), max_players: int()):
+    def __init__(self, lobby_name: str(), max_players: int(), duration: str()):
         self.name = lobby_name
         self.players_status = {}
         self.players_ip_to_name = {}
         self.max = max_players
+        self.duration = duration
+
 
     def connect(self, user: str(), user_addr: str()):
         if len(self.players_ip_to_name) < int(self.max):
@@ -25,6 +27,11 @@ class Lobby():
     def player_ready(self, ip: str()):
         self.players_status[self.players_ip_to_name[ip]] = 'Ready'
 
+    def get_dur(self):
+        if int(self.duration) == 0:
+            return f'без огр.'
+        else:
+            return f'огр. в {self.duration}'
 
 class Game:
     def __init__(self):

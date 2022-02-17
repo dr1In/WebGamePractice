@@ -21,7 +21,8 @@ def lobby_waiting(username):
         
 def main():
     username = input('Как вас зовут: ')
-
+    system('CLS')
+    
     print('Приветсвуем в игре', username)
     print('Посмотреть лобби - 1')
     print('Создать лобби - 2' + '\n')

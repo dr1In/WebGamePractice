@@ -17,12 +17,13 @@ game = Game()
 def create_lobby():
     name_lobby = request.json['name']
     max_players = request.json['max']
+    duration = request.json['month']
     username = request.json['user']
     ip = request.remote_addr
     users_ip_lobby[ip] = name_lobby
 
     if name_lobby not in lobbies_list:
-        lobbies_list[name_lobby] = Lobby(name_lobby, max_players)
+        lobbies_list[name_lobby] = Lobby(name_lobby, max_players, duration)
         lobbies_list[name_lobby].connect(username, ip)
         return jsonify(status = 'ok')
     else:
@@ -33,7 +34,8 @@ def create_lobby():
 def lobbies():
     information = [{
         'lobby_name': _,
-        'max': lobbies_list[_].get_emptiness()
+        'max': lobbies_list[_].get_emptiness(),
+        'type': lobbies_list[_].get_dur()
     } for _ in lobbies_list.keys()]
     return jsonify(lobbies = information)
 
