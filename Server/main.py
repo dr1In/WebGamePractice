@@ -20,7 +20,7 @@ def create_lobby():
     users_ip_lobby[ip] = name_lobby
 
     if name_lobby not in lobbies_list:
-        game_list[name_lobby] = Game(name_lobby, duration)
+        game_list[name_lobby] = Game(name_lobby, duration, max_players)
         lobbies_list[name_lobby] = Lobby(name_lobby, max_players, duration)
         lobbies_list[name_lobby].connect(username, ip)
         return jsonify(status = 'ok')
@@ -77,7 +77,7 @@ def connect():
 
 @app.get('/get_info')
 def get_info():
-    pass
+    return jsonify()
 
 
 @app.post('/buy_raw')

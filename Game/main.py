@@ -20,6 +20,12 @@ def game_process(user, g_id):
     Running = True
     while Running:
         system('CLS')
+        items_for_client.info()
+        match input(f'{user}: '):
+            case 1:
+                pass
+
+
         
         
 def main():

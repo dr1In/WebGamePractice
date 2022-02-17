@@ -71,3 +71,8 @@ def game_connect(username, g_id):
         'id': g_id,
         'user': username
     })
+
+
+def info():
+    resp = requests.get(f'{SERVER_URL}get_info')
+    print()
