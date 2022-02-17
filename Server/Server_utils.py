@@ -34,5 +34,18 @@ class Lobby():
             return f'огр. в {self.duration}'
 
 class Game:
-    def __init__(self):
-        self.players = list()
+    def __init__(self, game_id: str(), duration: str()):
+        self.players = dict()
+        self.id = game_id
+        self.dur = duration
+
+
+    def connect(self, user: str(), ip_addr: str()):
+        self.players[user] = {
+            'currency': 10000,
+            'material': 4,
+            'planes': 2,
+            'buildings': 2,
+            'status': 0,
+            'ip': ip_addr
+        }

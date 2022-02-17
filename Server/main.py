@@ -8,10 +8,7 @@ app = Flask(__name__)
 
 lobbies_list = dict()
 users_ip_lobby = dict()
-
-
-game = Game()
-
+game_list = dict()
 
 @app.post('/create_lobby')
 def create_lobby():
@@ -23,6 +20,7 @@ def create_lobby():
     users_ip_lobby[ip] = name_lobby
 
     if name_lobby not in lobbies_list:
+        game_list[name_lobby] = Game(name_lobby, duration)
         lobbies_list[name_lobby] = Lobby(name_lobby, max_players, duration)
         lobbies_list[name_lobby].connect(username, ip)
         return jsonify(status = 'ok')
@@ -68,6 +66,15 @@ def make_ready():
     return jsonify(answer = 'Вы готовы, ожидание других')
 
 
+@app.post('/connect')
+def connect():
+    g_id = request.json['id']
+    username = request.json['user']
+    ip_adr = request.remote_addr
+    game_list[g_id].connect(username, ip_adr)
+    return jsonify(answer = 'ok')
+
+
 @app.get('/get_info')
 def get_info():
     pass
@@ -101,4 +108,4 @@ def finish():
 
 
 if __name__ == '__main__':
-    app.run('127.0.0.1', 5000)
+    app.run('192.168.0.18', 5000)

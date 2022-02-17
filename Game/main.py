@@ -1,10 +1,8 @@
 from os import system
 import items_for_client
 
-SERVER_IP = '127.0.0.1'
+SERVER_IP = '192.168.0.18'
 SERVER_URL = f'http://{SERVER_IP}:5000/'
-
-
 
 
 
@@ -17,24 +15,31 @@ def lobby_waiting(username):
         print(phrase)
 
 
+def game_process(user, g_id):
+    items_for_client.game_connect(user, g_id)
+    Running = True
+    while Running:
+        system('CLS')
         
         
 def main():
     username = input('Как вас зовут: ')
     system('CLS')
-    
+
     print('Приветсвуем в игре', username)
     print('Посмотреть лобби - 1')
     print('Создать лобби - 2' + '\n')
 
     if input(f'{username}: ')  == '2':
         system('CLS')
-        items_for_client.Lobby_creation(username)
+        game_id = items_for_client.Lobby_creation(username)
         lobby_waiting(username)
     else:
         system('CLS')
-        items_for_client.Lobby_connection(username)
+        game_id = items_for_client.Lobby_connection(username)
         lobby_waiting(username)
+    
+    game_process(username, game_id)
 
 
 

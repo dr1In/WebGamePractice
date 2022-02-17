@@ -9,7 +9,7 @@ def Lobby_creation(username):
         resp  = requests.post(f'{SERVER_URL}create_lobby', json = {
             'name': input('Название лобби: '),
             'max': input('Кол-во игроков (мин - 2): '),
-            'month': input('Кол-во месяцев или 0 (пока все не банкроты)'),
+            'month': input('Кол-во месяцев или 0 (пока все не банкроты): '),
             'user': username
         })
         if resp.json()['status'] == 'ok':
@@ -34,6 +34,7 @@ def Lobby_connection(username):
             break
         else:
             print('Лобби уже переполненно')
+    return cur_lobby
         
 
 def Lobby_show(username):
@@ -59,8 +60,14 @@ def Lobby_show(username):
         return False
     
 
-
 def Lobby_coms(com):
     if com == '/Ready':
         resp = requests.post(f'{SERVER_URL}make_ready')
         return resp.json()['answer']
+
+
+def game_connect(username, g_id):
+    resp = requests.post(f'{SERVER_URL}connect', json={
+        'id': g_id,
+        'user': username
+    })
