@@ -71,7 +71,7 @@ def connect():
     g_id = request.json['id']
     username = request.json['user']
     ip_adr = request.remote_addr
-    game_list[g_id].connect(username, ip_adr)
+    game_list[users_ip_lobby[ip_adr]].connect(username, ip_adr)
     return jsonify(answer = 'ok')
 
 
