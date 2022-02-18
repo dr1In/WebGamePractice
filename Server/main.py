@@ -68,7 +68,6 @@ def make_ready():
 
 @app.post('/connect')
 def connect():
-    g_id = request.json['id']
     username = request.json['user']
     ip_adr = request.remote_addr
     game_list[users_ip_lobby[ip_adr]].connect(username, ip_adr)
@@ -78,7 +77,10 @@ def connect():
 @app.get('/get_info')
 def get_info():
     ip = request.remote_addr
-    return jsonify(data=game_list[users_ip_lobby[ip]].collect_info())
+    return jsonify(
+        data= game_list[users_ip_lobby[ip]].collect_info(),
+        user= game_list[users_ip_lobby[ip]].collect_player_info(ip)
+    )
 
 
 @app.post('/buy_raw')

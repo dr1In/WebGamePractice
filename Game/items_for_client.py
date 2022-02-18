@@ -75,6 +75,13 @@ def game_connect(username, g_id):
 
 def info():
     resp = requests.get(f'{SERVER_URL}get_info')
+    print('Ваши ресурсы:')
+    print('Деньги:', resp.json()['user']['currency'])
+    print('Материалы:', resp.json()['user']['material'])
+    print('Самолёты:', resp.json()['user']['planes'])
+    print('Заводы:', resp.json()['user']['buildings'])
+
+    print('Банк: ')
     print('Предложений сырья:', resp.json()['data']['material_quantity'])
     print('Минимальная цена сырья:', resp.json()['data']['material_cost'], 'т.р.')
     print('Спрос на истребители:', resp.json()['data']['plane_quantity'])

@@ -59,6 +59,9 @@ class Game:
     def collect_info(self):
         return update_market(self.market_lvl, self.P)
 
+    def collect_player_info(self, ip):
+        return self.players[self.ip_to_name[ip]]
+
 
 def update_market(lvl, P):
     markets = {
