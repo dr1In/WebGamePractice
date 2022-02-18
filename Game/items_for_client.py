@@ -75,4 +75,7 @@ def game_connect(username, g_id):
 
 def info():
     resp = requests.get(f'{SERVER_URL}get_info')
-    print()
+    print('Предложений сырья:', resp.json()['material_quantity'])
+    print('Минимальная цена сырья:', resp.json()['material_cost'], 'т.р.')
+    print('Спрос на истребители:', resp.json()['plane_quantity'])
+    print('Максимальная цена за истребитель:', resp.json()['plane_cost'], 'т.р.')

@@ -77,7 +77,8 @@ def connect():
 
 @app.get('/get_info')
 def get_info():
-    return jsonify()
+    ip = request.remote_addr
+    return jsonify(data=game_list[users_ip_lobby[ip]].collect_info())
 
 
 @app.post('/buy_raw')

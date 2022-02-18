@@ -57,7 +57,7 @@ class Game:
         self.ip_to_name[ip_addr] = ip_addr
 
     def collect_info(self):
-        return {}
+        return update_market(self.market_lvl, self.P)
 
 
 def update_market(lvl, P):
@@ -67,35 +67,39 @@ def update_market(lvl, P):
                 'material_quantity': P * 1,
                 'plane_cost': 6500,
                 'plane_quantity': P * 3,
-                'chance': [1,1,1,1,2,2,2,2,3,3,4,5]
             },
             2: {
                 'material_cost': 650,
                 'material_quantity': floor(P * 1.5),
                 'plane_cost': 6000,
                 'plane_quantity': floor(P * 2.5),
-                'chance': [1,1,1,2,2,2,2,3,3,3,4,5]
             },
             3: {
                 'material_cost': 500,
                 'material_quantity': P * 2,
                 'plane_cost': 5500,
                 'plane_quantity': P * 2,
-                'chance': [1,2,2,2,3,3,3,3,4,4,4,5]
             },
             4: {
                 'material_cost': 400,
                 'material_quantity': floor(P * 2.5),
                 'plane_cost': 5000,
                 'plane_quantity': floor(P * 1.5),
-                'chance': [1,2,3,3,3,4,4,4,4,5,5,5]
             },
             5: {
                 'material_cost': 300,
                 'material_quantity': P * 3,
                 'plane_cost': 4500,
                 'plane_quantity': P * 1,
-                'chance': [1,2,3,3,4,4,4,4,5,5,5,5]
             }
         }
     return markets[lvl]
+
+def market_change():
+    market = {
+        1: [1,1,1,1,2,2,2,2,3,3,4,5],
+        2: [1,1,1,2,2,2,2,3,3,3,4,5],
+        3: [1,2,2,2,3,3,3,3,4,4,4,5],
+        4: [1,2,3,3,3,4,4,4,4,5,5,5],
+        5: [1,2,3,3,4,4,4,4,5,5,5,5]
+    }
