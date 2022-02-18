@@ -39,7 +39,7 @@ class Game:
     def __init__(self, game_id: str(), duration: str(), max_pl: str()):
         self.players = dict()
         self.max_players = max_pl
-        self.P = self.max_players
+        self.P = int(self.max_players)
         self.id = game_id
         self.dur = duration
         self.market_lvl = 3
