@@ -85,7 +85,11 @@ def get_info():
 
 @app.post('/buy_raw')
 def buy_raw():
-    pass
+    ip = request.remote_addr
+    q = request.json['quantity']
+    p = request.json['price']
+    answer = game_list[users_ip_lobby[ip]].update_player_BR(ip, [int(q), int(p)])
+    return jsonify(status = answer)
 
 
 @app.post('/sell_planes')
@@ -106,6 +110,11 @@ def build():
 @app.post('/finish')
 def finish():
     pass
+
+@app.get('/game_status')
+def game_status():
+    ip = request.remote_addr
+    return jsonify(status = game_list[users_ip_lobby[ip]].get_game_status())
 
 
 

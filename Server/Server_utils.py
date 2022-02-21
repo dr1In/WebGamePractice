@@ -45,6 +45,7 @@ class Game:
         self.market_lvl = 3
         self.market = update_market(self.market_lvl, self.P)
         self.ip_to_name = dict()
+        self.game_status = 'Running'
 
     def connect(self, user: str(), ip_addr: str()):
         self.players[user] = {
@@ -53,14 +54,26 @@ class Game:
             'planes': 2,
             'buildings': 2,
             'status': 0,
+            'build_process': '-',
+            'BR': None
         }
-        self.ip_to_name[ip_addr] = ip_addr
+        self.ip_to_name[ip_addr] = user
 
     def collect_info(self):
         return update_market(self.market_lvl, self.P)
 
     def collect_player_info(self, ip):
         return self.players[self.ip_to_name[ip]]
+
+    def update_player_BR(self, ip, BR):
+        user = self.ip_to_name[ip]
+        if BR[0] > 0 and BR[0] <= self.market['material_quantity'] and BR[-1] >= self.market['material_cost'] and BR[-1] <= self.players[user]['currency']:
+            self.players[user]['BR'] = BR
+            return 'ok'
+        else: return 'error'
+
+    def get_game_status(self):
+        return self.game_status
 
 
 def update_market(lvl, P):

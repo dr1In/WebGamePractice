@@ -10,6 +10,7 @@ def lobby_waiting(username):
     (cur_state_ready, phrase) = (False, '')
     system('CLS')
     while items_for_client.Lobby_show(username):
+        print('enter - для обновления')
         if not cur_state_ready:
             phrase = items_for_client.Lobby_coms(input(f'{username}: '))
         print(phrase)
@@ -17,13 +18,21 @@ def lobby_waiting(username):
 
 def game_process(user, g_id):
     items_for_client.game_connect(user, g_id)
-    Running = True
-    while Running:
-        system('CLS')
-        items_for_client.info()
-        match input(f'{user}: '):
-            case 1:
-                pass
+    while items_for_client.game_status() == 'Running':
+        while True:
+            system('CLS')
+            items_for_client.info()
+            match input(f'{user}: '):
+                case '1':
+                    items_for_client.buy_raw()
+                case '2':
+                    pass
+                case '3':
+                    pass
+                case '4':
+                    pass
+                case '5':
+                    pass
 
 
         

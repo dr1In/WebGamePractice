@@ -1,3 +1,4 @@
+from itsdangerous import json
 import requests
 from os import system
 
@@ -73,6 +74,11 @@ def game_connect(username, g_id):
     })
 
 
+def game_status():
+    resp = requests.get(f'{SERVER_URL}game_status')
+    return resp.json()['status']
+
+
 def info():
     resp = requests.get(f'{SERVER_URL}get_info')
     print('Ваши ресурсы:')
@@ -80,9 +86,39 @@ def info():
     print('Материалы:', resp.json()['user']['material'])
     print('Самолёты:', resp.json()['user']['planes'])
     print('Заводы:', resp.json()['user']['buildings'])
+    print('Строительство завода:', resp.json()['user']['build_process'], 'месяца', '\n')
 
     print('Банк: ')
     print('Предложений сырья:', resp.json()['data']['material_quantity'])
     print('Минимальная цена сырья:', resp.json()['data']['material_cost'], 'т.р.')
     print('Спрос на истребители:', resp.json()['data']['plane_quantity'])
-    print('Максимальная цена за истребитель:', resp.json()['data']['plane_cost'], 'т.р.')
+    print('Максимальная цена за истребитель:', resp.json()['data']['plane_cost'], 'т.р.', '\n')
+
+    print('1) Купить материалы')
+    print('2) Продать самолеты')
+    print('3) Построить самолеты')
+    if resp.json()['user']['build_process'] == '-':
+        print('4) Построить завод')
+    else: pass
+    print('5) Ready - когда будете готовы')
+
+
+def buy_raw():
+    while True:
+        system('CLS')
+        resp = requests.get(f'{SERVER_URL}get_info')
+        print('Деньги:', resp.json()['user']['currency'])
+        print('Материалы:', resp.json()['user']['material'], '\n')
+
+        print('Предложений сырья:', resp.json()['data']['material_quantity'])
+        print('Минимальная цена сырья:', resp.json()['data']['material_cost'], 'т.р.')
+
+        ask = requests.post(f'{SERVER_URL}buy_raw', json={
+            'quantity': input('Введите кол-во материалов'),
+            'price': input('Введите цену за штуку')
+        })
+        if ask.json()['status'] == 'ok': break
+        else: print('Недопустимые значения')
+
+def produce():
+    pass
