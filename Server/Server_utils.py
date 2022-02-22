@@ -52,10 +52,13 @@ class Game:
             'currency': 10000,
             'material': 4,
             'planes': 2,
-            'buildings': 2,
+            'all_buildings': 2,
+            'active_buildings': 0,
             'status': 0,
             'build_process': '-',
-            'BR': None
+            'BR': None,
+            'SR': None,
+            'will_done': 0
         }
         self.ip_to_name[ip_addr] = user
 
@@ -72,8 +75,36 @@ class Game:
             return 'ok'
         else: return 'error'
 
+    def update_player_SP(self, ip, SP):
+        user = self.ip_to_name[ip]
+        if SP[0] > 0 and SP[0] <= self.market['plane_quantity'] and SP[-1] <= self.market['plane_cost'] and SP[0] <= self.players[user]['planes']:
+            self.players[user]['SP'] = SP
+            return 'ok'
+        else: return 'error'
+
     def get_game_status(self):
         return self.game_status
+    
+    def produce_plane(self, ip, q):
+        user = self.ip_to_name[ip]
+        if q >= 0 and q <= self.players[user]['material'] and q * 2000 <= self.players[user]['currency'] and self.players[user]['active_buildings'] + q <= self.players[user]['all_buildings']:
+            self.players[user]['material'] -= q
+            self.players[user]['currency'] -= q * 2000
+            self.players[user]['will_done'] += q
+            self.players[user]['active_buildings'] += q
+            return 'ok'
+        else: return 'error'
+
+    def build(self, ip, ask):
+        user = self.ip_to_name[ip]
+        if ask == 'N': return 'ok'
+        elif ask == 'Y':
+            self.players[user]['build_process'] = 4
+            self.players[user]['currency'] -= 2500
+            return 'ok'
+        else: return 'error'
+
+
 
 
 def update_market(lvl, P):

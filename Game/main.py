@@ -1,7 +1,7 @@
 from os import system
 import items_for_client
 
-SERVER_IP = '172.20.10.3'
+SERVER_IP = '192.168.0.18'
 SERVER_URL = f'http://{SERVER_IP}:5000/'
 
 
@@ -26,13 +26,13 @@ def game_process(user, g_id):
                 case '1':
                     items_for_client.buy_raw()
                 case '2':
-                    pass
+                    items_for_client.sell_planes()
                 case '3':
-                    pass
+                    items_for_client.produce()
                 case '4':
                     pass
                 case '5':
-                    pass
+                    items_for_client.build()
 
 
         

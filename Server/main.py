@@ -94,17 +94,27 @@ def buy_raw():
 
 @app.post('/sell_planes')
 def sell_planes():
-    pass
+    ip = request.remote_addr
+    q = request.json['quantity']
+    p = request.json['price']
+    answer = game_list[users_ip_lobby[ip]].update_player_SP(ip, [int(q), int(p)])
+    return jsonify(status = answer)
 
 
 @app.post('/produce')
 def produce():
-    pass
+    ip = request.remote_addr
+    q = request.json['quantity_planes']
+    answer = game_list[users_ip_lobby[ip]].produce_plane(ip, int(q))
+    return jsonify(status = answer)
 
 
 @app.post('/build')
 def build():
-    pass
+    ip = request.remote_addr
+    q = request.json['ask']
+    answer = game_list[users_ip_lobby[ip]].build(ip, q)
+    return jsonify(status = answer)
 
 
 @app.post('/finish')
@@ -120,4 +130,4 @@ def game_status():
 
 
 if __name__ == '__main__':
-    app.run('172.20.10.3', 5000)
+    app.run('192.168.0.18', 5000)
