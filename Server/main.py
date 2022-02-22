@@ -120,4 +120,4 @@ def game_status():
 
 
 if __name__ == '__main__':
-    app.run('192.168.0.18', 5000)
+    app.run('172.20.10.3', 5000)

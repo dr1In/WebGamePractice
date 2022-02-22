@@ -121,4 +121,17 @@ def buy_raw():
         else: print('Недопустимые значения')
 
 def produce():
-    pass
+    while True:
+        system('CLS')
+        resp = requests.get(f'{SERVER_URL}get_info')
+        print('Деньги:', resp.json()['user']['currency'])
+        print('Заводы:', resp.json()['user']['buildings'])
+        print('Материалы:', resp.json()['user']['material'], '\n')
+
+
+        ask = requests.post(f'{SERVER_URL}buy_raw', json={
+            'quantity': input('Введите кол-во материалов'),
+            'price': input('Введите цену за штуку')
+        })
+        if ask.json()['status'] == 'ok': break
+        else: print('Недопустимые значения')
