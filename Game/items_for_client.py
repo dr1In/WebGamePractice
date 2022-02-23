@@ -78,6 +78,11 @@ def game_status():
     resp = requests.get(f'{SERVER_URL}game_status')
     return resp.json()['status']
 
+def player_status():
+    resp = requests.get(f'{SERVER_URL}player_status')
+    return resp.json()['status']
+
+
 
 def info():
     resp = requests.get(f'{SERVER_URL}get_info')
@@ -170,3 +175,11 @@ def build():
         })
         if ask.json()['status'] == 'ok': break
         else: break
+
+
+def finish():
+    temp = input('Вы хотите поставить READY? (Y/N): ')
+    if temp == 'Y':
+        ask = requests.post(f'{SERVER_URL}finish', json={
+                'ask': temp
+            })

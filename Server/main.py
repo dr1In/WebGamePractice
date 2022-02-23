@@ -119,7 +119,10 @@ def build():
 
 @app.post('/finish')
 def finish():
-    pass
+    ip = request.remote_addr
+    game_list[users_ip_lobby[ip]].change_player_status(ip)
+    return jsonify(status = 'ok')
+
 
 @app.get('/game_status')
 def game_status():
@@ -127,6 +130,10 @@ def game_status():
     return jsonify(status = game_list[users_ip_lobby[ip]].get_game_status())
 
 
+@app.get('/player_status')
+def player_status():
+    ip = request.remote_addr
+    return jsonify(status = game_list[users_ip_lobby[ip]].player_status(ip))
 
 
 if __name__ == '__main__':

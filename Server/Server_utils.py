@@ -43,9 +43,9 @@ class Game:
         self.id = game_id
         self.dur = duration
         self.market_lvl = 3
-        self.market = update_market(self.market_lvl, self.P)
         self.ip_to_name = dict()
         self.game_status = 'Running'
+        self.players_ready = 0
 
     def connect(self, user: str(), ip_addr: str()):
         self.players[user] = {
@@ -54,10 +54,10 @@ class Game:
             'planes': 2,
             'all_buildings': 2,
             'active_buildings': 0,
-            'status': 0,
+            'status': 'NR',
             'build_process': '-',
             'BR': None,
-            'SR': None,
+            'SP': None,
             'will_done': 0
         }
         self.ip_to_name[ip_addr] = user
@@ -70,7 +70,7 @@ class Game:
 
     def update_player_BR(self, ip, BR):
         user = self.ip_to_name[ip]
-        if BR[0] > 0 and BR[0] <= self.market['material_quantity'] and BR[-1] >= self.market['material_cost'] and BR[-1] <= self.players[user]['currency']:
+        if BR[0] > 0 and BR[0] <= self.market['material_quantity'] and BR[-1] >= self.market['material_cost'] and BR[-1] * BR[0] <= self.players[user]['currency']:
             self.players[user]['BR'] = BR
             return 'ok'
         else: return 'error'
@@ -104,6 +104,29 @@ class Game:
             return 'ok'
         else: return 'error'
 
+    def player_status(self, ip):
+        user = self.ip_to_name[ip]
+        return self.players[user]['status']
+
+    def change_player_status(self, ip):
+        user = self.ip_to_name[ip]
+        self.players[user]['status'] = 'R'
+        self.players_ready += 1
+        if self.players_ready == self.P:
+            self.update_month()
+
+    def update_month(self):
+        (market_buy, market_sell) = (dict(), dict())
+        for user in self.players:
+            if self.players[user]['BR'] is not None:
+                market_buy[user] = self.players[user]['BR']
+            if self.players[user]['SP'] is not None:
+                market_sell[user] = self.players[user]['SP']
+        result = buing(update_market(self.market_lvl, self.P), market_buy)
+        for user in result.keys():
+            self.players[user]['material'] += result[user][0]
+            self.players[user]['currency'] -= result[user][0] * result[user][-1]
+        result2 = selling(update_market(self.market_lvl, self.P), market_sell)
 
 
 
@@ -150,3 +173,25 @@ def market_change():
         4: [1,2,3,3,3,4,4,4,4,5,5,5],
         5: [1,2,3,3,4,4,4,4,5,5,5,5]
     }
+
+
+def buing(market, asks):
+    quantity = market['material_quantity']
+    asks = sorted(asks.items(), key=lambda x: x[-1][-1], reverse=True)
+    asks = {k: v for k, v in asks}
+    temp = dict()
+    for user in asks.keys():
+        if quantity > 0:
+            if quantity > asks[user][0]:
+                temp[user] = asks[user]
+                quantity -= asks[user][0]
+            elif asks[user][0] > quantity:
+                temp[user] = asks[user]
+                temp[user][0] = quantity
+                break
+        else: break
+    return temp
+
+
+def selling(market, asks):
+    pass

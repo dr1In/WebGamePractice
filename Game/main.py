@@ -19,7 +19,7 @@ def lobby_waiting(username):
 def game_process(user, g_id):
     items_for_client.game_connect(user, g_id)
     while items_for_client.game_status() == 'Running':
-        while True:
+        while items_for_client.player_status() == 'NR':
             system('CLS')
             items_for_client.info()
             match input(f'{user}: '):
@@ -30,9 +30,11 @@ def game_process(user, g_id):
                 case '3':
                     items_for_client.produce()
                 case '4':
-                    pass
+                    items_for_client.finish()
                 case '5':
                     items_for_client.build()
+        system('CLS')
+        print('Вы окончили ход ожидайте других')
 
 
         
