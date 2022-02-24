@@ -1,7 +1,7 @@
 from os import system
 import items_for_client
 
-SERVER_IP = '192.168.0.18'
+SERVER_IP = '172.20.10.3'
 SERVER_URL = f'http://{SERVER_IP}:5000/'
 
 
@@ -35,8 +35,9 @@ def game_process(user, g_id):
                     items_for_client.build()
         system('CLS')
         print('Вы окончили ход ожидайте других')
-
-
+        if items_for_client.player_status() == 'B':
+            print('Вы проиграли :(')
+    items_for_client.winner()
         
         
 def main():

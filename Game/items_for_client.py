@@ -183,3 +183,6 @@ def finish():
         ask = requests.post(f'{SERVER_URL}finish', json={
                 'ask': temp
             })
+
+def winner():
+    pass

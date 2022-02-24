@@ -41,7 +41,7 @@ class Game:
         self.max_players = max_pl
         self.P = int(self.max_players)
         self.id = game_id
-        self.dur = duration
+        self.dur = int(duration)
         self.market_lvl = 3
         self.ip_to_name = dict()
         self.game_status = 'Running'
@@ -69,15 +69,17 @@ class Game:
         return self.players[self.ip_to_name[ip]]
 
     def update_player_BR(self, ip, BR):
+        market = update_market(self.market_lvl, self.P)
         user = self.ip_to_name[ip]
-        if BR[0] > 0 and BR[0] <= self.market['material_quantity'] and BR[-1] >= self.market['material_cost'] and BR[-1] * BR[0] <= self.players[user]['currency']:
+        if BR[0] > 0 and BR[0] <= market['material_quantity'] and BR[-1] >= market['material_cost'] and BR[-1] * BR[0] <= self.players[user]['currency']:
             self.players[user]['BR'] = BR
             return 'ok'
         else: return 'error'
 
     def update_player_SP(self, ip, SP):
+        market = update_market(self.market_lvl, self.P)
         user = self.ip_to_name[ip]
-        if SP[0] > 0 and SP[0] <= self.market['plane_quantity'] and SP[-1] <= self.market['plane_cost'] and SP[0] <= self.players[user]['planes']:
+        if SP[0] > 0 and SP[0] <= market['plane_quantity'] and SP[-1] <= market['plane_cost'] and SP[0] <= self.players[user]['planes']:
             self.players[user]['SP'] = SP
             return 'ok'
         else: return 'error'
@@ -118,9 +120,9 @@ class Game:
     def update_month(self):
         (market_buy, market_sell) = (dict(), dict())
         for user in self.players:
-            if self.players[user]['BR'] is not None:
+            if self.players[user]['BR'] is not None and self.players[user]['BR'] != 'B':
                 market_buy[user] = self.players[user]['BR']
-            if self.players[user]['SP'] is not None:
+            if self.players[user]['SP'] is not None and self.players[user]['BR'] != 'B':
                 market_sell[user] = self.players[user]['SP']
         result = buing(update_market(self.market_lvl, self.P), market_buy)
         for user in result.keys():
@@ -131,12 +133,15 @@ class Game:
             self.players[user]['currency'] += result2[user][0] * result2[user][-1]
             self.players[user]['planes'] -= result2[user][0]
         for player in self.players.keys():
+            if self.players[user]['BR'] == 'B': continue
             money = self.players[player]['all_buildings'] * 1000 + self.players[player]['planes'] * 500 + self.players[player]['material'] * 300
             self.players[player]['currency'] -= money
             self.players[player]['planes'] += self.players[player]['will_done']
             self.players[player]['will_done'] = 0
+            self.players[player]['active_buildings'] = 0
             self.players[player]['BR'] = None
             self.players[player]['SP'] = None
+            self.players[player]['status'] = 'NR'
             if self.players[player]['build_process'] != '-':
                 self.players[player]['build_process'] -= 1
             if self.players[player]['build_process'] == 0:
@@ -146,6 +151,8 @@ class Game:
             if self.players[player]['currency'] <= 0:
                 self.P -= 1
                 self.players[player]['status'] = 'B'
+        if self.P == 0:
+            self.game_status = 'End'   
 
 
 
