@@ -127,6 +127,25 @@ class Game:
             self.players[user]['material'] += result[user][0]
             self.players[user]['currency'] -= result[user][0] * result[user][-1]
         result2 = selling(update_market(self.market_lvl, self.P), market_sell)
+        for user in result2.keys():
+            self.players[user]['currency'] += result2[user][0] * result2[user][-1]
+            self.players[user]['planes'] -= result2[user][0]
+        for player in self.players.keys():
+            money = self.players[player]['all_buildings'] * 1000 + self.players[player]['planes'] * 500 + self.players[player]['material'] * 300
+            self.players[player]['currency'] -= money
+            self.players[player]['planes'] += self.players[player]['will_done']
+            self.players[player]['will_done'] = 0
+            self.players[player]['BR'] = None
+            self.players[player]['SP'] = None
+            if self.players[player]['build_process'] != '-':
+                self.players[player]['build_process'] -= 1
+            if self.players[player]['build_process'] == 0:
+                self.players[player]['build_process'] = '-'
+                self.players[player]['all_buildings'] += 1
+                self.players[player]['currency'] -= 2500
+            if self.players[player]['currency'] <= 0:
+                self.P -= 1
+                self.players[player]['status'] = 'B'
 
 
 
@@ -194,4 +213,18 @@ def buing(market, asks):
 
 
 def selling(market, asks):
-    pass
+    quantity = market['material_quantity']
+    asks = sorted(asks.items(), key=lambda x: x[-1][-1])
+    asks = {k: v for k, v in asks}
+    temp = dict()
+    for user in asks.keys():
+        if quantity > 0:
+            if quantity > asks[user][0]:
+                temp[user] = asks[user]
+                quantity -= asks[user][0]
+            elif asks[user][0] > quantity:
+                temp[user] = asks[user]
+                temp[user][0] = quantity
+                break
+        else: break
+    return temp
